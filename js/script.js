@@ -36,6 +36,27 @@ function loadData() {
       $nytHeaderElem.text('New Yrok Times Could Not Be Loaded');
     });
 
+    //load wikiElem
+    var wikiurl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+cityStr+'&format=json&callback=wikiCallback';
+
+    var wikiRequestTimeout = setTimeout(function(){
+      $wikiElem.text("Fail tp get wikipedia resources");
+    },8000);
+
+    $.ajax({
+      url:wikiurl,
+      dataType: "jsonp",
+      success: function(response) {
+        var articleList = response[1];
+        for(var i =0; i< articleList.length;i++){
+          articleStr = articleList[i];
+          var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+          $wikiElem.append('<li><a href = "'+url+'">' + articleStr +'</a></li>');
+        };
+        clearTimeout(wikiRequestTimeout);
+      }
+    });
+
 
 
 
